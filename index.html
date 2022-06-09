@@ -18,23 +18,35 @@
       ctx.fillStyle = "black";
       ctx.strokeStyle = "none";
       let painting = false;
-      canvas.onmousedown = () => {
-        painting = true;
-      };
-
-      canvas.onmousemove = (e) => {
-        if (painting === true) {
+      var isTouchDevice = "ontouchstart" in document.documentElement;
+      if (isTouchDevice) {
+        canvas.ontouchmove = (v) => {
+          let x = v.touches[0].clientX;
+          let y = v.touches[0].clientY;
           ctx.beginPath();
-          ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+          ctx.arc(x, y, 10, 0, 2 * Math.PI);
           ctx.stroke();
           ctx.fill();
-        } else {
-          console.log("什么都不做");
-        }
-      };
-      canvas.onmouseup = () => {
-        painting = false;
-      };
+        };
+      } else {
+        canvas.onmousedown = () => {
+          painting = true;
+        };
+
+        canvas.onmousemove = (e) => {
+          if (painting === true) {
+            ctx.beginPath();
+            ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fill();
+          } else {
+            console.log("什么都不做");
+          }
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+      }
     </script>
   </body>
 </html>
